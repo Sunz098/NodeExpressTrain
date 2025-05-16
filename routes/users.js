@@ -76,7 +76,25 @@ router.post('/register', async function(req, res, next){
     console.log(error);
     res.status(500).send({status:500,message: error.message,data:null});
   }
-});
+}); 
+
+ router.get('/',async function(req , res, next){
+  try {
+    const users = await userSchema.find({}).sort({ createdAt: -1 });
+    res.status(200).send({
+      status: 200,
+      message: 'ดึงข้อมูลผู้ใช้งานทั้งหมดสำเร็จ',
+      data: users
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({
+      status: 500,
+      message: 'เกิดข้อผิดพลาดในการดึงข้อมูล',
+      data: []
+    });
+  }
+ })
 
 //login
 router.post('/login', async function(req, res, next){
@@ -118,7 +136,7 @@ router.post('/login', async function(req, res, next){
     const token = jwt.sign(
       { _id: user._id, username: user.username },
       process.env.JWT_SECRET,
-      { expiresIn: '1h' }
+      { expiresIn: '3h' }
     );
 
     res.status(200).send({
@@ -157,6 +175,11 @@ router.put('/:id/approve', async function(req, res, next){
   res.status(500).send({status:500 ,message: message.error,data:null });
   console.log(error);
  }})
+
+
+
+
+
 
 
 module.exports = router;

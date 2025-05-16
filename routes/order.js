@@ -7,7 +7,7 @@ const verifyToken = require('../middleware/verify.middleware')
 
 router.get('/',verifyToken,approve, async function(req, res) {
      try {
-            const orders = await orderSchema.find({})
+            const orders = await orderSchema.find({}).sort({createdAt: -1})
             res.status(200).send({
                 status: 200,
                 message: 'ดึง order ทุกรายการสำเร็จ',
